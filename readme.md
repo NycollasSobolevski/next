@@ -9,6 +9,11 @@ Tecnologias utilizadas:
 Interface com usuário: 
 [Windows UI](https://github.com/microsoft/WindowsAppSDK)
 
+[Prototipação Esquema Físico](https://www.figma.com/board/FpcnRfROIaRzgwp1n8VSdE/Next?node-id=0-1&p=f&t=ITFdHt1tavWwVhDP-0):
+
+
+[slider module](Docs/files/modules/slider-module.png)
+[slider module](Docs/files/modules/4button-module.png)
 
 
 Hardware:
