@@ -12,12 +12,14 @@ public partial class App : Application
 {
     public static IServiceProvider Services { get; protected set; } = null!;
     public static Logger Logger = null!;
+    public static Reader Reader = null!;
     public App()
     {
         var servicesCollection = new ServiceCollection();
         servicesCollection.ConfigureServices();
         Services = servicesCollection.BuildServiceProvider();
         Logger = Services.GetService<Logger>()!;
+        Reader = Services.GetService<Reader>()!;
     }
 
     public override void Initialize()

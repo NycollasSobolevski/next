@@ -20,6 +20,7 @@ public partial class SoundSlider : Module
     { 
         CurrentValue = (int)args.NewValue;
         currnentValueText.Text = CurrentValue.ToString();
+        App.Reader.SendData(CurrentValue.ToString() );
         App.Logger.WriteLine(CurrentValue.ToString());
     }
 }

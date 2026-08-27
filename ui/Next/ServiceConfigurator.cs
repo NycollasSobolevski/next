@@ -8,6 +8,7 @@ public static partial class ServiceConfigurator
     public static IServiceCollection ConfigureServices(this ServiceCollection services)
     {
         services.AddSingleton<Logger>();
+        services.AddSingleton<Reader>();
 
         return services;
     }

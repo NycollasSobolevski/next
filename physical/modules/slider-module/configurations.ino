@@ -12,6 +12,7 @@ int pinActionButton = 4;
 
 int stepsPerCicle = 100;
 
+int TOLERANCE = 0.3;
 
 int potenciometerMinValue = 0;
 int potenciometerMaxValue = 4095;
@@ -32,26 +33,17 @@ void updatePotentiometerValue(){
 // percent is an percentage of potenciometer
 void goToValue(int percent ){
   bool toTop = percent > getCurrentPositionValue();
+  float valueMax = percent + TOLERANCE;
+  float valueMin = percent - TOLERANCE;
   digitalWrite(pinDir, !toTop);
-  if(toTop){
-    while(potentiometerValue < percent){
-      digitalWrite(pinStep, 1);        
-      delay(10);
-      digitalWrite(pinStep, 0);        
-      delay(10);
-      updatePotentiometerValue();
-    }
-    return;
+  while(potentiometerValue <= valueMax && potentiometerValue >= valueMin){
+    digitalWrite(pinStep, 1);
+    delay(10);
+    digitalWrite(pinStep, 0);
+    delay(10);
+    updatePotentiometerValue();
   }
-  else {
-    while(potentiometerValue > percent){
-      digitalWrite(pinStep, 1);        
-      delay(10);
-      digitalWrite(pinStep, 0);        
-      delay(10);
-      updatePotentiometerValue();
-    }
-  }
+  return;
 }
 
 void goToExtremity(bool toTop = true){ 
