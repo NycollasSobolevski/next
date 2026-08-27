@@ -14,13 +14,13 @@ public partial class SoundSlider : Module
         InitializeComponent();
         ModuleLabel.Text = this.ModuleName;
         SliderValue.Value = CurrentValue;
-
     }
 
     public void OnChange(object sender, RangeBaseValueChangedEventArgs args)
     { 
         CurrentValue = (int)args.NewValue;
         currnentValueText.Text = CurrentValue.ToString();
-        App.Services.GetService<Logger>()!.WriteLine(CurrentValue.ToString());
+        App.Logger.WriteLine(CurrentValue.ToString());
+        Reader r = new();
     }
 }

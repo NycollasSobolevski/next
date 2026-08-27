@@ -25,7 +25,6 @@ public partial class LogViewer : UserControl
         Dispatcher.UIThread.Post(() =>
         {
             Logs.Add(value);
-            
         });
         Dispatcher.UIThread.Post(() =>
     {

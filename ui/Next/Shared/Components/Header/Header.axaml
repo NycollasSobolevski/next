@@ -9,7 +9,14 @@
           Background="#FF4C4C4E"
           Margin="40">
     <WrapPanel>
-      <Button Foreground="AliceBlue">Butaozin</Button>
+      <Button 
+        Foreground="AliceBlue"
+        x:Name="ConnectUsbBtn"
+        Click="onUsbClicked"
+        >
+        Connect USB
+      </Button>
+
       <TextBlock Text="{Binding $parent[Window].Title}"
                  VerticalAlignment="Center"
                  Margin="15,0,0,0"

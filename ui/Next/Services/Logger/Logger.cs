@@ -9,7 +9,6 @@ namespace Next.Services;
 public class Logger : ILogger
 {
     public List<string> Logs {get; private set;} = [];
-
     public event Action<string>? ExecuteOnLog;
 
     public void WriteLine(string value)
