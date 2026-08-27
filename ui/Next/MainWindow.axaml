@@ -5,16 +5,22 @@
         
         xmlns:components="using:Next.Shared.Components"
         xmlns:modules="using:Next.Shared.Components.Modules"
+        xmlns:services="using:Next.Services"
 
-        Background="#AD00233F"
+        Background="#A800575E"
+        TransparencyBackgroundFallback="AliceBlue"
+        TransparencyLevelHint="AcrylicBlur"
+
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Next.MainWindow"
         Title="Next">
-        
+
         <StackPanel
+                
                 VerticalAlignment="Top">
                 <components:Header/>
                 <modules:SoundSlider/>
+                <services:LogViewer/>
         </StackPanel>
 
 </Window>

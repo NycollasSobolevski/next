@@ -1,7 +1,6 @@
-
-
 using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
+using Avalonia.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Next.Shared.Components.Modules;
 

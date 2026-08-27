@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using Avalonia.Logging;
+using Next.Services;
 
 namespace Next;
 
