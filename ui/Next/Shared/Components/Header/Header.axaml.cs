@@ -13,6 +13,5 @@ public partial class Header : UserControl
 
     public void onUsbClicked(object sender, RoutedEventArgs args)
     {
-        Reader r = new();
     }
 }

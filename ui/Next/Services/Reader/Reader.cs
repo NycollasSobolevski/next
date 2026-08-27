@@ -32,6 +32,9 @@ public class Reader
         App.Logger.WriteLine(data);
     }
 
+    public void SendData(string value)
+        => SerialPort.WriteLine(value);
+
     private bool GetConnectionWithDevice()
     { 
         App.Logger.WriteLine("Trying to connect device");

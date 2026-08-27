@@ -5,7 +5,7 @@ extern int pinDir;
 extern int pinEndSwitch;
 extern int pinStartSwitch;
 extern int pinActionButton;
-
+extern int TOLERANCE;
 extern int potentiometerValue;
 
 extern int stepsPerCicle;
