@@ -17,14 +17,13 @@ public class Reader
     public void StartConnection()
     {
         GetConnectionWithDevice();
-        SerialPort = new SerialPort("COM3", BaudRate);
-        SerialPort.DataReceived += ReceiveData;
+        // SerialPort.DataReceived += ReceiveData;
 
-        try
-        {
-            SerialPort.Open();
-            App.Logger.WriteLine("USB Connectado");
-        } catch (Exception e ) { App.Logger.WriteLine($"Erro ao abrir a porta: {e.Message}"); }
+        // try
+        // {
+        //     SerialPort.Open();
+        //     App.Logger.WriteLine("USB Connectado");
+        // } catch (Exception e ) { App.Logger.WriteLine($"Erro ao abrir a porta: {e.Message}"); }
     }
 
     private void ReceiveData(object sender, SerialDataReceivedEventArgs e)
@@ -34,9 +33,13 @@ public class Reader
     }
 
     private bool GetConnectionWithDevice()
-    {
+    { 
+        App.Logger.WriteLine("Trying to connect device");
         var portList = SerialPort.GetPortNames();
-        
+        foreach(string port in portList)
+        {
+            App.Logger.WriteLine(port);
+        }
         foreach (var port in portList)
         {
             App.Logger.WriteLine($"Trying connect to port: {port}");
@@ -47,13 +50,19 @@ public class Reader
                     ReadTimeout = 500,
                     WriteTimeout = 500
                 };
+                App.Logger.WriteLine("  Trying to open port");
 
                 testPort.Open();
 
+
+                App.Logger.WriteLine("  Trying to send command");
                 testPort.WriteLine("next_module");
+
+                App.Logger.WriteLine("  Waiting for response");
                 Thread.Sleep(100);
 
                 string response = testPort.ReadLine().Trim();
+                App.Logger.WriteLine("  Response: " + response);
 
                 if(response == "next_module")
                 {
@@ -64,10 +73,10 @@ public class Reader
 
             }catch (TimeoutException)
             {
-                App.Logger.WriteLine($"Timeout exception ({port})");
+                App.Logger.WriteLine($"ERROR: Timeout exception ({port})");
             }catch (Exception e)
             {
-                App.Logger.WriteLine($"Error on conect to {port}: {e.Message}");
+                App.Logger.WriteLine($"ERROR: on conect to {port}: {e.Message}");
                 
             }
         }
