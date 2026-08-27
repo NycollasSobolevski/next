@@ -7,20 +7,19 @@
              x:DataType="local:LogViewer"
              x:Class="Next.Services.LogViewer">
 
-  <Border
-    Height="100"
-    Background="Black"
-  >
-    <ItemsControl ItemsSource="{Binding Logs}">
-      <ItemsControl.ItemTemplate>
-        <DataTemplate>
-          <TextBlock Text="{Binding}"
-                     FontSize="16"
-                     Margin="0,5"
-                     Foreground="White"/>
-        </DataTemplate>
-      </ItemsControl.ItemTemplate>
-    </ItemsControl>
-  </Border>
-
+  <ScrollViewer x:Name="logScroll" Height="100">
+    <Border
+      Background="Black">
+      <ItemsControl ItemsSource="{Binding Logs}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Text="{Binding}"
+                       FontSize="13"
+                       Margin="0,5"
+                       Foreground="White"/>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </Border>
+  </ScrollViewer>
 </UserControl>

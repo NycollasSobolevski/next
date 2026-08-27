@@ -1,6 +1,6 @@
 using Avalonia.Controls.Primitives;
-using Avalonia.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Next.Services;
 
 namespace Next.Shared.Components.Modules;
 
@@ -14,11 +14,13 @@ public partial class SoundSlider : Module
         InitializeComponent();
         ModuleLabel.Text = this.ModuleName;
         SliderValue.Value = CurrentValue;
+
     }
 
     public void OnChange(object sender, RangeBaseValueChangedEventArgs args)
     { 
         CurrentValue = (int)args.NewValue;
         currnentValueText.Text = CurrentValue.ToString();
+        App.Services.GetService<Logger>()!.WriteLine(CurrentValue.ToString());
     }
 }

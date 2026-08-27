@@ -8,7 +8,7 @@ namespace Next;
 
 public partial class App : Application
 {
-    public static IServiceProvider Services { get; protected set; }
+    public static IServiceProvider Services { get; protected set; } = null!;
 
     public App()
     {

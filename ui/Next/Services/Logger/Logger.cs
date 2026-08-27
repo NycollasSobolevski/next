@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,16 +10,11 @@ public class Logger : ILogger
 {
     public List<string> Logs {get; private set;} = [];
 
-    // public void CreateFile()
-    // {
-    //     if (!File.Exists(Path))
-    //         File.Create(Path);
-    //     WriteLine("Log initialized");
-    // }
+    public event Action<string>? ExecuteOnLog;
 
     public void WriteLine(string value)
-        => Logs.Add(value);
-
-    // public IEnumerable<string> GetLines()
-    //     => File.ReadLines(Path);
+    {
+        Logs.Add(value);
+        ExecuteOnLog?.Invoke(value);
+    }
 }
