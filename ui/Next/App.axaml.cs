@@ -20,6 +20,7 @@ public partial class App : Application
         Services = servicesCollection.BuildServiceProvider();
         Logger = Services.GetService<Logger>()!;
         Reader = Services.GetService<Reader>()!;
+        Reader.GetConnectionWithDevice();
     }
 
     public override void Initialize()

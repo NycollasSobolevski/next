@@ -1,7 +1,5 @@
 #include "configurations.h";
 
-bool isConnected = false;
-
 void setup(){
   pinMode(pinActionButton, INPUT_PULLUP);
   pinMode(pinPot, INPUT);
@@ -12,21 +10,7 @@ void setup(){
 
   Serial.begin(115200);
 
-  while(!isConnected) {
-    if(Serial.available() > 0){
-      String command = Serial.readStringUntil('\n');
-      command.trim();
-
-      if(command == "next_module") {
-        Serial.println("next_module");
-        isConnected = true;
-      }
-    }
-    digitalWrite(LED_BUILTIN, 1);
-    delay(1000);
-    digitalWrite(LED_BUILTIN, 0);
-    delay(1000);
-  }
+  tryConnect();
 
   Serial.println("\n -------- Pin Settings -------- \n");
 
@@ -45,33 +29,15 @@ void setup(){
 }
 
 void loop(){
-  // definindo posicao para baixo ao infinito;
-  digitalWrite(pinDir, 0);
+  // if(!isConnected){tryConnect();  }
+  // if(!digitalRead(pinActionButton)){isConnected = false;}
+  if(!digitalRead(pinActionButton)){goToValue(100);}
 
-  if(!digitalRead(pinActionButton)){
-    Serial.println("ACTION BUTTON PRESSED");
-    digitalWrite(LED_BUILTIN, 1);
-    
-    // definindo rotacao para o sentido contrario
-    digitalWrite(pinDir, 1);
-
-    for(int i =0; i < 1000; i++){
-      digitalWrite(pinStep, 1);
-      delay(2);
-      digitalWrite(pinStep, 0);
-      delay(2);
-    }
-
-    digitalWrite(LED_BUILTIN, 0);
+  int value = Serial.parseInt();
+  if(value > 0){
+    goToValue(value);
   }
-  // Serial.print(digitalRead(pinActionButton));
-  // Serial.print(" - ");
-  // Serial.println(analogRead(pinPot));
 
-  
-  // digitalWrite(pinStep, 1);
-  // delay(100);
-  // digitalWrite(pinStep, 0);
-  // delay(100);
+  delay(250);
 }
 

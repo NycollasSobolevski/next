@@ -7,35 +7,33 @@ namespace Next.Services;
 
 public class Reader
 {
-    private SerialPort SerialPort { get; set; }
+    private SerialPort SerialPort { get; set; } = null!;
     private int BaudRate { get; set; } = 115200;
-    
-    public Reader()
-    {
-        StartConnection();
-    }
-    public void StartConnection()
-    {
-        GetConnectionWithDevice();
-        // SerialPort.DataReceived += ReceiveData;
 
-        // try
-        // {
-        //     SerialPort.Open();
-        //     App.Logger.WriteLine("USB Connectado");
-        // } catch (Exception e ) { App.Logger.WriteLine($"Erro ao abrir a porta: {e.Message}"); }
+
+    public void StartListening()
+    {
+        if(SerialPort == null || !SerialPort.IsOpen) return;
+        SerialPort.DataReceived += ReceiveData;
     }
 
-    private void ReceiveData(object sender, SerialDataReceivedEventArgs e)
+    public void ReceiveData(object sender, SerialDataReceivedEventArgs e)
     {
         string data = SerialPort.ReadLine();
         App.Logger.WriteLine(data);
     }
 
     public void SendData(string value)
-        => SerialPort.WriteLine(value);
+    {
+        if(SerialPort == null || !SerialPort.IsOpen) {
+            App.Logger.WriteLine($"Serial port is not open. {SerialPort}/{SerialPort?.IsOpen}");
+            
+            return;
+        }
+        SerialPort.WriteLine(value);
+    }
 
-    private bool GetConnectionWithDevice()
+    public  bool GetConnectionWithDevice()
     { 
         App.Logger.WriteLine("Trying to connect device");
         var portList = SerialPort.GetPortNames();

@@ -12,21 +12,34 @@ int pinActionButton = 4;
 
 int stepsPerCicle = 100;
 
-int TOLERANCE = 0.3;
+int TOLERANCE = 3;
+bool isConnected = false;
 
 int potenciometerMinValue = 0;
 int potenciometerMaxValue = 4095;
-int potentiometerValue = 0;
+
+void tryConnect(){
+  while(!isConnected) {
+    if(Serial.available() > 0){
+      String command = Serial.readStringUntil('\n');
+      command.trim();
+
+      if(command == "next_module") {
+        Serial.println("next_module");
+        isConnected = true;
+      }
+    }
+    digitalWrite(LED_BUILTIN, 1);
+    delay(1000);
+    digitalWrite(LED_BUILTIN, 0);
+    delay(1000);
+  }
+}
 
 // return a percentage of potenciometer in current value
 int getCurrentPositionValue(){
   int currentValue = analogRead(pinPot);
   return (currentValue * 100) / potenciometerMaxValue; 
-}
-
-void updatePotentiometerValue(){
-  potentiometerValue = getCurrentPositionValue();
-  Serial.println(potentiometerValue );
 }
 
 
@@ -35,23 +48,15 @@ void goToValue(int percent ){
   bool toTop = percent > getCurrentPositionValue();
   float valueMax = percent + TOLERANCE;
   float valueMin = percent - TOLERANCE;
-  digitalWrite(pinDir, !toTop);
-  while(potentiometerValue <= valueMax && potentiometerValue >= valueMin){
+  digitalWrite(pinDir, toTop);
+  while(!(getCurrentPositionValue() <= valueMax && getCurrentPositionValue() >= valueMin)){
     digitalWrite(pinStep, 1);
-    delay(10);
+    delay(2);
     digitalWrite(pinStep, 0);
-    delay(10);
-    updatePotentiometerValue();
+    delay(2);
+    
   }
   return;
-}
-
-void goToExtremity(bool toTop = true){ 
-  int cursorEndPressed = digitalRead(pinEndSwitch);
-  while(cursorEndPressed < 1){
-    // runCicle(toTop);
-    if(toTop){}
-  }
 }
 
 void calibratePotenciometer() {
@@ -62,15 +67,4 @@ void calibratePotenciometer() {
   min = digitalRead(pinPot);
   potenciometerMinValue = min;
   potenciometerMaxValue = max;
-}
-
-void runCicle(bool toTop = true) {
-  digitalWrite(pinDir, toTop);
-  // validate if the cursor is on the end of potenciometer (endSwitch/StartSwitch is on HIGH)
-  for(int step = 0; step < stepsPerCicle; step++){
-    digitalWrite(pinStep, 1);        
-    delay(10);
-    digitalWrite(pinStep, 0);        
-    delay(10);
-  }
 }

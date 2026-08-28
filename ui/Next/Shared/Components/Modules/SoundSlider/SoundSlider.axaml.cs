@@ -19,8 +19,10 @@ public partial class SoundSlider : Module
     public void OnChange(object sender, RangeBaseValueChangedEventArgs args)
     { 
         CurrentValue = (int)args.NewValue;
-        currnentValueText.Text = CurrentValue.ToString();
-        App.Reader.SendData(CurrentValue.ToString() );
-        App.Logger.WriteLine(CurrentValue.ToString());
+        string value = CurrentValue.ToString();
+        if(value == null) return;
+        currnentValueText.Text = value;
+        App.Reader.SendData(value);
+        App.Logger.WriteLine(value);
     }
 }
