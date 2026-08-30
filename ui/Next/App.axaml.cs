@@ -15,17 +15,19 @@ public partial class App : Application
     public static Reader Reader = null!;
     public App()
     {
+        
+    }
+
+    public override void Initialize()
+    {
+        AvaloniaXamlLoader.Load(this);
+        base.OnFrameworkInitializationCompleted();
         var servicesCollection = new ServiceCollection();
         servicesCollection.ConfigureServices();
         Services = servicesCollection.BuildServiceProvider();
         Logger = Services.GetService<Logger>()!;
         Reader = Services.GetService<Reader>()!;
         Reader.GetConnectionWithDevice();
-    }
-
-    public override void Initialize()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     public override void OnFrameworkInitializationCompleted()
@@ -36,6 +38,6 @@ public partial class App : Application
             desktop.MainWindow = new MainWindow();
         }
 
-        base.OnFrameworkInitializationCompleted();
+
     }
 }

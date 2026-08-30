@@ -10,6 +10,8 @@ public class Reader
     private SerialPort SerialPort { get; set; } = null!;
     private int BaudRate { get; set; } = 115200;
 
+    public SerialPort GetSerialPort()
+        => SerialPort;
 
     public void StartListening()
     {
@@ -33,7 +35,7 @@ public class Reader
         SerialPort.WriteLine(value);
     }
 
-    public  bool GetConnectionWithDevice()
+    public bool GetConnectionWithDevice()
     { 
         App.Logger.WriteLine("Trying to connect device");
         var portList = SerialPort.GetPortNames();

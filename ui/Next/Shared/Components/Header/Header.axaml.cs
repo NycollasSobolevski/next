@@ -13,5 +13,6 @@ public partial class Header : UserControl
 
     public void onUsbClicked(object sender, RoutedEventArgs args)
     {
+        App.Logger.WriteLine(App.Reader.GetSerialPort().ToString());
     }
 }
