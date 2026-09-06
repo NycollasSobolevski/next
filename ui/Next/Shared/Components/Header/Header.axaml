@@ -11,10 +11,17 @@
     <WrapPanel>
       <Button 
         Foreground="AliceBlue"
-        x:Name="ConnectUsbBtn"
-        Click="onUsbClicked"
+        x:Name="checkUSBBtn"
+        Click="OnUsbClicked"
         >
-        Connect USB
+        Start Listening
+      </Button>
+      <Button 
+        Foreground="AliceBlue"
+        x:Name="ConnectUsbBtn"
+        Click="OnConnectClicked"
+        >
+          Connect
       </Button>
 
       <TextBlock Text="{Binding $parent[Window].Title}"

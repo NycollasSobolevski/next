@@ -22,7 +22,5 @@ public partial class SoundSlider : Module
         string value = CurrentValue.ToString();
         if(value == null) return;
         currnentValueText.Text = value;
-        App.Reader.SendData(value);
-        App.Logger.WriteLine(value);
     }
 }

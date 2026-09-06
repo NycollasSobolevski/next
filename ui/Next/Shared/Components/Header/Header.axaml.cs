@@ -1,5 +1,7 @@
+using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Microsoft.Extensions.DependencyInjection;
 using Next.Services;
 
 namespace Next.Shared.Components;
@@ -11,8 +13,12 @@ public partial class Header : UserControl
         InitializeComponent();
     }
 
-    public void onUsbClicked(object sender, RoutedEventArgs args)
+    public void OnUsbClicked(object sender, RoutedEventArgs args)
     {
-        App.Logger.WriteLine(App.Reader.GetSerialPort().ToString());
+        Console.WriteLine();
+    }
+    public void OnConnectClicked(object sender, RoutedEventArgs args)
+    {
+        Console.WriteLine();
     }
 }

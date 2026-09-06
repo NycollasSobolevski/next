@@ -6,7 +6,7 @@ int pinDir = 26;
 
 int pinPot = 27;
 int pinActionButton = 4;
-
+int pinEnable = 33;
 // int pinEndSwitch = 15;
 // int pinStartSwitch = 16;
 
@@ -45,17 +45,19 @@ int getCurrentPositionValue(){
 
 // percent is an percentage of potenciometer
 void goToValue(int percent ){
+  Serial.println("going to posityion");
   bool toTop = percent > getCurrentPositionValue();
   float valueMax = percent + TOLERANCE;
   float valueMin = percent - TOLERANCE;
   digitalWrite(pinDir, toTop);
+  digitalWrite(pinEnable, 0);
   while(!(getCurrentPositionValue() <= valueMax && getCurrentPositionValue() >= valueMin)){
     digitalWrite(pinStep, 1);
     delay(2);
     digitalWrite(pinStep, 0);
     delay(2);
-    
   }
+  digitalWrite(pinEnable, 1);
   return;
 }
 
@@ -67,4 +69,26 @@ void calibratePotenciometer() {
   min = digitalRead(pinPot);
   potenciometerMinValue = min;
   potenciometerMaxValue = max;
+}
+
+void SendMessage(char[] action, char[] value)
+{
+
+}
+
+
+
+
+bool checkPotentiometer()
+{
+  if(!digitalRead(pinActionButton))
+    
+}
+bool checkActionButton()
+{
+
+}
+bool checkChanges()
+{
+
 }

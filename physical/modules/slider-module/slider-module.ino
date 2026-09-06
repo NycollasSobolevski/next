@@ -6,11 +6,11 @@ void setup(){
   pinMode(LED_BUILTIN, OUTPUT);
 
   pinMode(pinStep, OUTPUT);
+  pinMode(pinEnable, OUTPUT);
   pinMode(pinDir, OUTPUT);
 
   Serial.begin(115200);
 
-  tryConnect();
 
   Serial.println("\n -------- Pin Settings -------- \n");
 
@@ -26,18 +26,18 @@ void setup(){
   Serial.println(pinDir);
 
   delay(5000);
+  digitalWrite(pinEnable, 1);
 }
 
 void loop(){
-  // if(!isConnected){tryConnect();  }
   // if(!digitalRead(pinActionButton)){isConnected = false;}
-  if(!digitalRead(pinActionButton)){goToValue(100);}
-
+  //if(!digitalRead(pinActionButton)){goToValue(100);}
+  //if(!Serial.available()){tryConnect();}
   int value = Serial.parseInt();
   if(value > 0){
     goToValue(value);
   }
-
+  checkChanges();
   delay(250);
 }
 

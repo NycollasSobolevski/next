@@ -9,6 +9,7 @@ public static partial class ServiceConfigurator
     {
         services.AddSingleton<Logger>();
         services.AddSingleton<Reader>();
+        services.AddSingleton<MainWindow>();
 
         return services;
     }

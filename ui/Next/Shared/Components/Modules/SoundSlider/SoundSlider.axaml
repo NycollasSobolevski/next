@@ -21,7 +21,7 @@
       <Border Margin="10 10 10 10">
         <Slider
           x:Name="SliderValue"
-          Minimum="0" Maximum="100" Value="50"
+          Minimum="1" Maximum="100" Value="50"
           ValueChanged="OnChange"
 
           Height="200"

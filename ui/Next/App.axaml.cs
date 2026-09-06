@@ -21,23 +21,29 @@ public partial class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
-        base.OnFrameworkInitializationCompleted();
+    }
+
+    public override void OnFrameworkInitializationCompleted()
+    {
+
         var servicesCollection = new ServiceCollection();
         servicesCollection.ConfigureServices();
         Services = servicesCollection.BuildServiceProvider();
         Logger = Services.GetService<Logger>()!;
         Reader = Services.GetService<Reader>()!;
-        Reader.GetConnectionWithDevice();
-    }
 
-    public override void OnFrameworkInitializationCompleted()
-    {
-        
+        var vm = Services.GetRequiredService<MainWindow>();
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow();
+            desktop.MainWindow = new MainWindow
+            {
+                DataContext = vm
+            };
         }
 
+
+        base.OnFrameworkInitializationCompleted();
 
     }
 }
