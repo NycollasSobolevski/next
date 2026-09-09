@@ -17,4 +17,8 @@ void calibratePotenciometer();
 void runCicle(bool toTop);
 void tryConnect();
 
-void checkChanges();
+int checkPotentiometer();
+bool checkActionButton();
+
+bool checkChanges();
+

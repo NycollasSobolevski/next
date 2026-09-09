@@ -25,7 +25,7 @@ void setup(){
   Serial.print("pinDir: ");
   Serial.println(pinDir);
 
-  delay(5000);
+  delay(1000);
   digitalWrite(pinEnable, 1);
 }
 
@@ -37,7 +37,7 @@ void loop(){
   if(value > 0){
     goToValue(value);
   }
-  checkChanges();
-  delay(250);
+  bool foo = checkChanges();
+  delay(50);
 }
 

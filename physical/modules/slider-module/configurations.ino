@@ -12,9 +12,10 @@ int pinEnable = 33;
 
 int stepsPerCicle = 100;
 
-int TOLERANCE = 3;
+int TOLERANCE = 2;
 bool isConnected = false;
 
+int potenciometerValue = 0;
 int potenciometerMinValue = 0;
 int potenciometerMaxValue = 4095;
 
@@ -39,7 +40,9 @@ void tryConnect(){
 // return a percentage of potenciometer in current value
 int getCurrentPositionValue(){
   int currentValue = analogRead(pinPot);
-  return (currentValue * 100) / potenciometerMaxValue; 
+  int value = (currentValue * 100) / potenciometerMaxValue;
+  potenciometerValue = value;
+  return value; 
 }
 
 
@@ -71,24 +74,39 @@ void calibratePotenciometer() {
   potenciometerMaxValue = max;
 }
 
-void SendMessage(char[] action, char[] value)
+void SendMessage(byte action, byte value)
 {
-
+  // notes: Serial.write dont convert the value to string, the method send the pure byte value and Serial.print convert the value into string to view data (100 -> '1', '0', '0')
+  Serial.write("index"); // index of this module get current index within modules
+  Serial.write(1); // OUT
+  Serial.write(action); // Action
+  Serial.write(value); // Value of action
 }
 
 
-
-
-bool checkPotentiometer()
+int checkPotentiometer()
 {
-  if(!digitalRead(pinActionButton))
-    
+  int oldValue = potenciometerValue;
+  int newValue = getCurrentPositionValue();
+  if(newValue < (oldValue - TOLERANCE) 
+      || newValue > (oldValue + TOLERANCE) ){
+    return potenciometerValue;
+  }
+  return -1;
 }
 bool checkActionButton()
 {
-
+  if(!digitalRead(pinActionButton))
+    return true;
+  return false;
 }
 bool checkChanges()
 {
-
+  if(int value = checkPotentiometer(); value > 0 ){
+    SendMessage(2, value);
+  }
+  if(checkActionButton()){
+    SendMessage(1, 0);
+  }
+  return false; // Retorno padrão caso nenhuma alteração aconteça
 }
