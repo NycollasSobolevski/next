@@ -1,41 +1,21 @@
-
 #include "configurations.h";
 
+int pinEnable = 33;
 int pinStep = 25;
 int pinDir = 26;
 
 int pinPot = 27;
 int pinActionButton = 4;
-int pinEnable = 33;
 // int pinEndSwitch = 15;
 // int pinStartSwitch = 16;
 
 int stepsPerCicle = 100;
 
 int TOLERANCE = 2;
-bool isConnected = false;
 
 int potenciometerValue = 0;
 int potenciometerMinValue = 0;
 int potenciometerMaxValue = 4095;
-
-void tryConnect(){
-  while(!isConnected) {
-    if(Serial.available() > 0){
-      String command = Serial.readStringUntil('\n');
-      command.trim();
-
-      if(command == "next_module") {
-        Serial.println("next_module");
-        isConnected = true;
-      }
-    }
-    digitalWrite(LED_BUILTIN, 1);
-    delay(1000);
-    digitalWrite(LED_BUILTIN, 0);
-    delay(1000);
-  }
-}
 
 // return a percentage of potenciometer in current value
 int getCurrentPositionValue(){
@@ -48,7 +28,7 @@ int getCurrentPositionValue(){
 
 // percent is an percentage of potenciometer
 void goToValue(int percent ){
-  Serial.println("going to posityion");
+  Serial.println("going to position");
   bool toTop = percent > getCurrentPositionValue();
   float valueMax = percent + TOLERANCE;
   float valueMin = percent - TOLERANCE;
