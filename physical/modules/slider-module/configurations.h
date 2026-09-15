@@ -15,7 +15,6 @@ void goToValue(int percent );
 void goToExtremity(bool toTop);
 void calibratePotenciometer();
 void runCicle(bool toTop);
-void tryConnect();
 
 int checkPotentiometer();
 bool checkActionButton();

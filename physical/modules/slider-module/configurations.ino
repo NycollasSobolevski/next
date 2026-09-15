@@ -1,4 +1,5 @@
 #include "configurations.h";
+#include "Wire.h";
 
 int pinEnable = 33;
 int pinStep = 25;
@@ -16,6 +17,9 @@ int TOLERANCE = 2;
 int potenciometerValue = 0;
 int potenciometerMinValue = 0;
 int potenciometerMaxValue = 4095;
+
+volatile byte changes = 0;
+volatile bool changesHasSended = false;
 
 // return a percentage of potenciometer in current value
 int getCurrentPositionValue(){
@@ -54,15 +58,25 @@ void calibratePotenciometer() {
   potenciometerMaxValue = max;
 }
 
-void SendMessage(byte action, byte value)
+void SendMessage()
 {
+  if(changesHasSended){
+    Wire.write(-1);
+    return;
+  }
   // notes: Serial.write dont convert the value to string, the method send the pure byte value and Serial.print convert the value into string to view data (100 -> '1', '0', '0')
-  Serial.write("index"); // index of this module get current index within modules
+  Wire.write(changes);
+  changesHasSended = true;
+}
+
+void onChange(byte action, byte value)
+{
   Serial.write(1); // OUT
   Serial.write(action); // Action
   Serial.write(value); // Value of action
+  changes = action + value;
+  changesHasSended = false;
 }
-
 
 int checkPotentiometer()
 {
@@ -83,10 +97,11 @@ bool checkActionButton()
 bool checkChanges()
 {
   if(int value = checkPotentiometer(); value > 0 ){
-    SendMessage(2, value);
+    onChange(2, value);
   }
   if(checkActionButton()){
-    SendMessage(1, 0);
+    onChange(1, 0);
   }
+  
   return false; // Retorno padrão caso nenhuma alteração aconteça
 }

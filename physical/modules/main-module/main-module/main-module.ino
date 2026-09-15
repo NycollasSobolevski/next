@@ -1,9 +1,8 @@
-
 #include <Wire.h>
 
 
-int CONNECTION_REQUEST_PORT = 3;
-int CONNECTION_REQUEST_STATUS_PORT = 4;
+int CONNECTION_REQUEST_PORT = 12;
+int CONNECTION_REQUEST_STATUS_PORT = 14;
 bool CONNECTION_STATUS = true;
 
 String connections[16] = {};
@@ -36,7 +35,8 @@ void addWireConnection(int index, String value)
 
 int verifyConnectionRequest()
 {
-  if (digitalRead(CONNECTION_REQUEST_PORT) == 0 || !CONNECTION_STATUS)
+  bool isRequested = digitalRead(CONNECTION_REQUEST_PORT);
+  if (isRequested == 0 || !CONNECTION_STATUS)
   {
     return -1;
   }
@@ -71,17 +71,36 @@ int verifyConnectionRequest()
     newPort = getAvailableConnection();
   }
 
-  addWireConnection(newPort);
+  addWireConnection(newPort, receivedId);
   String message = String(newPort) + "-" + receivedId;
   Serial.println(newPort);
   Wire.beginTransmission(1);
   Wire.write((uint8_t *)message.c_str(), message.length());
   Wire.endTransmission();
 
+  for(int i =0; i< 5; i++)
+  {
+    digitalWrite(LED_BUILTIN, 1);
+    delay(200);
+    digitalWrite(LED_BUILTIN, 0);
+    delay(200);
+  }
+
   CONNECTION_STATUS = true;
   digitalWrite(CONNECTION_REQUEST_STATUS_PORT, CONNECTION_STATUS);
 
   return 1;
+}
+
+void onReceiveMessage(int numBytes)
+{
+  String value = "";
+  while(Wire.available())
+  {
+    value += Wire.read();
+  }
+  //Serial.write(value);
+  Serial.println(value);
 }
 
 void setup()
@@ -102,13 +121,20 @@ void setup()
 void loop()
 {
   verifyConnectionRequest();
-  // Serial.println("send handshake");
-  // for(int i = 1; i < 16; i++ ){
-  //   if(connections[i]){
-  //      Wire.beginTransmission(i);
-  //      Wire.write(1);
-  //      Wire.endTransmission();
-  //  }
-  //}
+  Serial.println("send handshake");
+  for(int i = 1; i < 16; i++ ){
+    if(connections[i]){
+      Wire.requestFrom(i, 16);
+      String value ="";
+      while(Wire.available())
+      {
+        char c = Wire.read();
+        Serial.println(c);
+        value += c;
+      }
+      Serial.print("Message received:");
+      Serial.println(value);
+   }
+  }
   delay(500);
 }

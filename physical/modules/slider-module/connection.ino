@@ -1,18 +1,19 @@
 #include "Wire.h";
 #include "connection.h";
-#include "configurations.h"
+#include "configurations.h";
 
 String SERIAL_ID = "ABC";
 
-int CONNECTION_REQUEST_PORT = 3;
-int CONNECTION_REQUEST_STATUS_PORT = 4;
+int CONNECTION_REQUEST_PORT = 12;
+int CONNECTION_REQUEST_STATUS_PORT = 14;
 bool CONNECTION_STATUS = true;
 
-volatile int wirePort = 1;
-volatile bool mudouPorta = false;
+int wirePort = 1;
+bool mudouPorta = false;
 
 void configureGPIOPorts(){
-
+    pinMode(CONNECTION_REQUEST_PORT, OUTPUT);
+    pinMode(CONNECTION_REQUEST_STATUS_PORT, INPUT);
 }
 
 /** @brief send SERIAL_ID when is on connecting mode*/
@@ -20,7 +21,7 @@ void requestId()
 {
     if (wirePort == 1)
     {
-        Wire.write(SERIAL_ID.c_str());
+        Wire.write((uint8_t*)SERIAL_ID.c_str(), SERIAL_ID.length());
     }
 }
 
@@ -49,7 +50,7 @@ void receiveConnection(int numBytes)
 /** @brief execute when receive information from MASTER (I2C) */
 void receiveEvent(int numBytes)
 {
-    if (Wire.available())
+    while (Wire.available())
     {
         Serial.println(Wire.read());
     }
@@ -61,27 +62,26 @@ void configureWire()
     Wire.end();
     Wire.begin(wirePort);
     Wire.onReceive(receiveEvent);
+    Wire.onRequest(SendMessage);
 }
 
 /** Try connect with MAIN MODULE via I2C */
 void tryConnect()
 {
+    configureGPIOPorts();
     Wire.end();
     Wire.begin(1);
     Wire.onRequest(requestId);
     Wire.onReceive(receiveConnection);
+    digitalWrite(CONNECTION_REQUEST_PORT, HIGH);
 
-    while (wirePort == 1)
+    Serial.print("Trying connect");
+    while (wirePort == 1 && !mudouPorta)
     {
         delay(250);
         digitalWrite(LED_BUILTIN, HIGH);
-        
-        bool CONNECTION_OPENED = digitalRead(CONNECTION_REQUEST_STATUS_PORT);
-        if (!CONNECTION_OPENED)
-        {
-            return;
-        }
-        digitalWrite(CONNECTION_REQUEST_PORT, HIGH);
+        Serial.print(wirePort);
+
         delay(250);
         digitalWrite(LED_BUILTIN, LOW);
     }

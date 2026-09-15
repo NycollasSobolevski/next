@@ -1,4 +1,6 @@
 #include "configurations.h";
+#include "connection.h";
+
 
 void setup(){
   pinMode(pinActionButton, INPUT_PULLUP);
@@ -24,6 +26,8 @@ void setup(){
   Serial.println(pinStep);
   Serial.print("pinDir: ");
   Serial.println(pinDir);
+
+  tryConnect();
 
   delay(1000);
   digitalWrite(pinEnable, 1);

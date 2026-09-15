@@ -7,7 +7,7 @@ extern bool CONNECTION_STATUS;
 extern int wirePort;
 extern bool portChanged;
 
-void configureGPIOPorts()
+void configureGPIOPorts();
 
 void requestId();
 void receiveConnection(int bytes);
