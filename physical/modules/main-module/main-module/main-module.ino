@@ -110,6 +110,7 @@ void setup()
   pinMode(CONNECTION_REQUEST_STATUS_PORT, OUTPUT);
 
   Wire.begin();
+  Wire.setTimeOut(1000);
   Serial.begin(115200);
 
   if (CONNECTION_STATUS)
@@ -121,20 +122,25 @@ void setup()
 void loop()
 {
   verifyConnectionRequest();
-  Serial.println("send handshake");
-  for(int i = 1; i < 16; i++ ){
-    if(connections[i]){
-      Wire.requestFrom(i, 16);
-      String value ="";
-      while(Wire.available())
+
+  for (int i = 2; i < 16; i++)
+  {
+    if (connections[i].length() > 0)
+    {
+      Wire.requestFrom(i, 1);
+      if (Wire.available())
       {
-        char c = Wire.read();
-        Serial.println(c);
-        value += c;
+        int received = Wire.read();
+        if (received != 255 && received != -1)
+        {
+          Serial.print("Data from [");
+          Serial.print(connections[i]);
+          Serial.print("]: ");
+          Serial.println(received);
+        }
       }
-      Serial.print("Message received:");
-      Serial.println(value);
-   }
+    }
   }
-  delay(500);
+
+  delay(100);
 }

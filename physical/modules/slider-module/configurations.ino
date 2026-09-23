@@ -61,7 +61,7 @@ void calibratePotenciometer() {
 void SendMessage()
 {
   if(changesHasSended){
-    Wire.write(-1);
+    Wire.write(0xFF);
     return;
   }
   // notes: Serial.write dont convert the value to string, the method send the pure byte value and Serial.print convert the value into string to view data (100 -> '1', '0', '0')
@@ -71,9 +71,9 @@ void SendMessage()
 
 void onChange(byte action, byte value)
 {
-  Serial.write(1); // OUT
-  Serial.write(action); // Action
-  Serial.write(value); // Value of action
+  Serial.print(1); // OUT
+  Serial.print(action); // Action
+  Serial.println(value); // Value of action
   changes = action + value;
   changesHasSended = false;
 }
