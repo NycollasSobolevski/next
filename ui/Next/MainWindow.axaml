@@ -3,9 +3,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         
+        xmlns:local="using:Next"
         xmlns:components="using:Next.Shared.Components"
         xmlns:modules="using:Next.Shared.Components.Modules"
         xmlns:services="using:Next.Services"
+
+        x:DataType="local:MainWindow"
 
         Background="#A800575E"
         TransparencyBackgroundFallback="AliceBlue"
@@ -15,11 +18,24 @@
         x:Class="Next.MainWindow"
         Title="Next">
 
-        <StackPanel
-                
-                VerticalAlignment="Top">
+        <StackPanel VerticalAlignment="Top">
                 <components:Header/>
-                <modules:SoundSlider/>
+                <ItemsControl ItemsSource="{Binding AudioServices}">
+                        <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                        <Border>
+                                                <modules:SoundSlider AudioService="{Binding .}"/>
+                                        </Border>
+                                </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <services:LogViewer/>
                 <services:LogViewer/>
         </StackPanel>
 
