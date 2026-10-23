@@ -13,14 +13,22 @@ public partial class Reader
 
     public Reader()
     {
-        System.Console.WriteLine("Creating Reader service");
-        SerialPort = new SerialPort("/dev/ttyUSB0", BaudRate);
-        SerialPort.ReadTimeout = 500;
-        SerialPort.WriteTimeout = 500;
-        SerialPort.Open();
+        try
+        {
 
-        StartListening();
-        System.Console.WriteLine("Created Reader service");
+            System.Console.WriteLine("Creating Reader service");
+            SerialPort = new SerialPort("/dev/ttyUSB0", BaudRate);
+            SerialPort.ReadTimeout = 500;
+            SerialPort.WriteTimeout = 500;
+            SerialPort.Open();
+
+            StartListening();
+            System.Console.WriteLine("Created Reader service");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error creating Reader service: {e.Message}");
+        }
     }
 
     public SerialPort? GetSerialPort()
