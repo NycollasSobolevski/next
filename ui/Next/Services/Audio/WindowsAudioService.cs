@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Next.Services.Audio;
 
 [SupportedOSPlatform("windows")]
-public class WindowsAudioService : IAudioService
+public partial class WindowsAudioService : IAudioService
 {
     private readonly Logger? _logger;
     private readonly object _throttleLock = new();
@@ -142,18 +142,24 @@ public class WindowsAudioService : IAudioService
         }
     }
 
-    private static IAudioEndpointVolume? GetMasterEndpointVolume()
+    private static IMMDevice? GetDefaultRenderDevice()
     {
         var enumerator = (IMMDeviceEnumerator)new MMDeviceEnumerator();
         // 0 = eRender, 1 = eMultimedia
         int hr = enumerator.GetDefaultAudioEndpoint(0, 1, out var device);
         Marshal.ReleaseComObject(enumerator);
 
-        if (hr != 0 || device == null) return null;
+        return hr != 0 || device == null ? null : device;
+    }
+
+    private static IAudioEndpointVolume? GetMasterEndpointVolume()
+    {
+        var device = GetDefaultRenderDevice();
+        if (device == null) return null;
 
         Guid iid = typeof(IAudioEndpointVolume).GUID;
         // CLSCTX_ALL = 23
-        hr = device.Activate(ref iid, 23, IntPtr.Zero, out var endpointObj);
+        int hr = device.Activate(ref iid, 23, IntPtr.Zero, out var endpointObj);
         Marshal.ReleaseComObject(device);
 
         if (hr != 0 || endpointObj == null) return null;

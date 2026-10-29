@@ -5,7 +5,7 @@
         
         xmlns:local="using:Next"
         xmlns:components="using:Next.Shared.Components"
-        xmlns:modules="using:Next.Shared.Components.Modules"
+        xmlns:mixer="using:Next.Shared.Components.VolumeMixer"
         xmlns:services="using:Next.Services"
 
         x:DataType="local:MainWindow"
@@ -20,21 +20,7 @@
 
         <StackPanel VerticalAlignment="Top">
                 <components:Header/>
-                <ItemsControl ItemsSource="{Binding AudioServices}">
-                        <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal"/>
-                                </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-
-                        <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                        <Border>
-                                                <modules:SoundSlider AudioService="{Binding .}"/>
-                                        </Border>
-                                </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <mixer:VolumeMixer Margin="10"/>
                 <services:LogViewer/>
                 <services:LogViewer/>
         </StackPanel>

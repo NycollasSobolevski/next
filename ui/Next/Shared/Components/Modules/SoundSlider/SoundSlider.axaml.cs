@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform;
 using Avalonia.Threading;
@@ -20,17 +21,25 @@ public partial class SoundSlider : Module
         set => SetValue(AudioServiceProperty, value);
     }
     private bool _isUpdatingInternally;
+    private bool _isDragging;
 
     public int CurrentValue { get; set; } = 50;
     public bool IsMuted { get; set; } = false;
     public string MutedImageAction { get; set; } = "avares://Next/Assets/Images/icons/sound_muted.png";
     public string UnmutedImageAction { get; set; } = "avares://Next/Assets/Images/icons/sound.png";
 
+    public event EventHandler<int>? VolumeChanged;
+    public event EventHandler<bool>? MuteToggled;
+
     public SoundSlider() : base("Slider Module 01", 0)
     {
         InitializeComponent();
         this.DataContext = this;
         // ModuleLabel.Text = ModuleName;
+
+        SliderValue.AddHandler(InputElement.PointerPressedEvent, (_, _) => _isDragging = true, RoutingStrategies.Tunnel, handledEventsToo: true);
+        SliderValue.AddHandler(InputElement.PointerReleasedEvent, (_, _) => _isDragging = false, RoutingStrategies.Bubble, handledEventsToo: true);
+        SliderValue.PointerCaptureLost += (_, _) => _isDragging = false;
 
         Loaded += OnLoaded;
     }
@@ -56,12 +65,22 @@ public partial class SoundSlider : Module
         }
         
 
-        ActionButtonImage.Source = new Avalonia.Media.Imaging.Bitmap(
-            AssetLoader.Open(
-                new Uri(IsMuted ? MutedImageAction : UnmutedImageAction)
-            )
-        );
+        UpdateActionIcon();
         SetInternalSliderValue(CurrentValue);
+    }
+
+    public void Refresh(string name, int volume, bool muted)
+    {
+        ModuleName = name;
+        if (!_isDragging)
+        {
+            SetInternalSliderValue(volume);
+        }
+        if (IsMuted != muted)
+        {
+            IsMuted = muted;
+            UpdateActionIcon();
+        }
     }
 
     public void OnChange(object sender, RangeBaseValueChangedEventArgs args)
@@ -72,14 +91,21 @@ public partial class SoundSlider : Module
         currnentValueText.Text = $"{CurrentValue}%";
 
         AudioService?.SetMasterVolume(CurrentValue);
+        VolumeChanged?.Invoke(this, CurrentValue);
     }
 
     public void ActionButtonToggle(object sender, RoutedEventArgs args)
     {
         App.Logger?.WriteLine($"[SoundSlider] Action button clicked.");
-        IsMuted = !AudioService!.IsMuted();  
+        IsMuted = !(AudioService?.IsMuted() ?? IsMuted);
         AudioService?.SetMuted(IsMuted);
+        MuteToggled?.Invoke(this, IsMuted);
 
+        UpdateActionIcon();
+    }
+
+    private void UpdateActionIcon()
+    {
         ActionButtonImage.Source = new Avalonia.Media.Imaging.Bitmap(
             AssetLoader.Open(
                 new Uri(IsMuted ? MutedImageAction : UnmutedImageAction)

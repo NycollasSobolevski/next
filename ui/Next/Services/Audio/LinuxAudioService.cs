@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Next.Services.Audio;
 
-public class LinuxAudioService : IAudioService
+public partial class LinuxAudioService : IAudioService
 {
     private readonly Logger? _logger;
     private readonly string? _toolPath;

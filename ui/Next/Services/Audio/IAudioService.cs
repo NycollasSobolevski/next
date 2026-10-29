@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Next.Services.Audio;
 
 public interface IAudioService
@@ -22,4 +24,19 @@ public interface IAudioService
     /// Sets master audio output mute status.
     /// </summary>
     void SetMuted(bool isMuted);
+
+    /// <summary>
+    /// Lists applications that currently have an audio session, one entry per application.
+    /// </summary>
+    IReadOnlyList<AppAudioSession> GetAppSessions();
+
+    /// <summary>
+    /// Sets the volume (0 to 100) of every audio session belonging to the application with the given id.
+    /// </summary>
+    void SetAppVolume(string id, int volume);
+
+    /// <summary>
+    /// Sets the mute status of every audio session belonging to the application with the given id.
+    /// </summary>
+    void SetAppMuted(string id, bool isMuted);
 }
