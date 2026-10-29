@@ -2,38 +2,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Next.Shared.Components.Modules"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="local:SoundSlider"
              x:Class="Next.Shared.Components.Modules.SoundSlider">
 
-  <Border >
-    <StackPanel>
-      <Border Margin="10 10 10 10">
+  <StackPanel>
+    <StackPanel >
+      <Border Margin="10">
         <StackPanel>
-
-          <TextBlock
-            x:Name="ModuleLabel"
-            />
-          <TextBlock
-            x:Name="currnentValueText"
-            />
+          <TextBox Text="{Binding ModuleName, Mode=TwoWay}" TextAlignment="Center"/>
+          <TextBlock x:Name="currnentValueText" />
         </StackPanel>
       </Border>
-      <Border Margin="10 10 10 10">
-        <Slider
-          x:Name="SliderValue"
-          Minimum="1" Maximum="100" Value="50"
-          ValueChanged="OnChange"
 
-          Height="200"
-          Orientation="Vertical"
-          TickFrequency="5"
-          IsSnapToTickEnabled="True"
-          TickPlacement="Outside"
-          ></Slider>
+      <Border Margin="10">
+        <Slider x:Name="SliderValue"
+                Minimum="0" Maximum="100" Value="50"
+                ValueChanged="OnChange"
+                Height="200"
+                Orientation="Vertical"
+                TickFrequency="5"
+                IsSnapToTickEnabled="True"
+                TickPlacement="Outside" />
       </Border>
 
+      <Border Margin="10">
+        <Button x:Name="ActionButton" Click="ActionButtonToggle">
+          <Image x:Name="ActionButtonImage" Width="32" Height="32"/>
+        </Button>
+      </Border>
 
     </StackPanel>
-  </Border>
+  </StackPanel>
 
 </UserControl>

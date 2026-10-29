@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:modules="using:Next.Shared.Components.Modules"
+             x:Class="Next.Shared.Components.VolumeMixer.VolumeMixer">
+
+  <StackPanel Orientation="Horizontal">
+    <modules:SoundSlider x:Name="MasterRow"/>
+    <Border Width="1" Background="#40FFFFFF" Margin="4,20"/>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+      <StackPanel x:Name="AppList" Orientation="Horizontal"/>
+    </ScrollViewer>
+  </StackPanel>
+
+</UserControl>

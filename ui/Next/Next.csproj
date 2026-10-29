@@ -11,6 +11,9 @@
     <Watch Include="**\*.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="12.1.1" />
